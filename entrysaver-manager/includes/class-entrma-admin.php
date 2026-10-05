@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class CF7EM_Admin {
+class ENTRMA_Admin {
 
     /**
      * Initialize admin component
@@ -16,10 +16,10 @@ class CF7EM_Admin {
         add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
         
         // AJAX actions
-        add_action('wp_ajax_cf7em_get_entry', array(__CLASS__, 'ajax_get_entry'));
-        add_action('wp_ajax_cf7em_update_entry', array(__CLASS__, 'ajax_update_entry'));
-        add_action('wp_ajax_cf7em_delete_entry', array(__CLASS__, 'ajax_delete_entry'));
-        add_action('wp_ajax_cf7em_save_column_settings', array(__CLASS__, 'ajax_save_column_settings'));
+        add_action('wp_ajax_entrma_get_entry', array(__CLASS__, 'ajax_get_entry'));
+        add_action('wp_ajax_entrma_update_entry', array(__CLASS__, 'ajax_update_entry'));
+        add_action('wp_ajax_entrma_delete_entry', array(__CLASS__, 'ajax_delete_entry'));
+        add_action('wp_ajax_entrma_save_column_settings', array(__CLASS__, 'ajax_save_column_settings'));
         
         // Export CSV action
         add_action('admin_init', array(__CLASS__, 'handle_csv_export'));
@@ -63,23 +63,23 @@ class CF7EM_Admin {
         global $wp_styles;
 
         wp_enqueue_style(
-            'cf7em-admin-css',
-            CF7EM_URL . 'assets/css/admin-style.css',
+            'entrma-admin-css',
+            ENTRMA_URL . 'assets/css/admin-style.css',
             array(),
-            CF7EM_VERSION
+            ENTRMA_VERSION
         );
 
         wp_enqueue_script(
-            'cf7em-admin-js',
-            CF7EM_URL . 'assets/js/admin-script.js',
+            'entrma-admin-js',
+            ENTRMA_URL . 'assets/js/admin-script.js',
             array('jquery'),
-            CF7EM_VERSION,
+            ENTRMA_VERSION,
             true
         );
 
-        wp_localize_script('cf7em-admin-js', 'cf7emData', array(
+        wp_localize_script('entrma-admin-js', 'entrmaData', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce'   => wp_create_nonce('cf7em_admin_nonce'),
+            'nonce'   => wp_create_nonce('entrma_admin_nonce'),
             'i18n'    => array(
                 'confirmDelete'     => __('Are you sure you want to delete this entry?', 'entrysaver-manager'),
                 'confirmBulkDelete' => __('Are you sure you want to delete selected entries?', 'entrysaver-manager'),
@@ -155,8 +155,8 @@ class CF7EM_Admin {
     public static function register_settings() {
 
         register_setting(
-            'cf7_settings_group',
-            'cf7_settings',
+            'entrma_settings_group',
+            'entrma_settings',
             array(
                 'type'              => 'array',
                 'sanitize_callback' => array( __CLASS__, 'sanitize_settings' ),
@@ -165,33 +165,33 @@ class CF7EM_Admin {
         );
 
         add_settings_section(
-            'cf7_general_section',
+            'entrma_general_section',
             __( 'General Settings', 'entrysaver-manager' ),
             '__return_false',
-            'cf7_settings'
+            'entrma_settings'
         );
 
         add_settings_field(
-            'cf7_show_zero_entry_forms',
+            'entrma_show_zero_entry_forms',
             __( 'Show forms with 0 entries', 'entrysaver-manager' ),
             array( __CLASS__, 'render_show_zero_entry_field' ),
-            'cf7_settings',
-            'cf7_general_section'
+            'entrma_settings',
+            'entrma_general_section'
         );
 
         add_settings_section(
-            'cf7_user_data_section',
+            'entrma_user_data_section',
             __( 'User Data Collection', 'entrysaver-manager' ),
             '__return_false',
-            'cf7_settings'
+            'entrma_settings'
         );
 
         add_settings_field(
-            'cf7_collect_user_data',
+            'entrma_collect_user_data',
             __( 'Get user IP address and browser data', 'entrysaver-manager' ),
             array( __CLASS__, 'render_collect_user_data_field' ),
-            'cf7_settings',
-            'cf7_user_data_section'
+            'entrma_settings',
+            'entrma_user_data_section'
         );
     }
 
@@ -219,7 +219,7 @@ class CF7EM_Admin {
 
     public static function get_settings() {
         return wp_parse_args(
-            get_option( 'cf7_settings', array() ),
+            get_option( 'entrma_settings', array() ),
             self::get_defaults()
         );
     }
@@ -238,8 +238,8 @@ class CF7EM_Admin {
             
             <form method="post" action="options.php">
                 <?php
-                settings_fields( 'cf7_settings_group' );
-                do_settings_sections( 'cf7_settings' );
+                settings_fields( 'entrma_settings_group' );
+                do_settings_sections( 'entrma_settings' );
                 submit_button();
                 ?>
             </form>
@@ -258,7 +258,7 @@ class CF7EM_Admin {
         <label>
             <input
                 type="checkbox"
-                name="cf7_settings[show_zero_entry_forms]"
+                name="entrma_settings[show_zero_entry_forms]"
                 value="1"
                 <?php checked( $value, true ); ?>
             >
@@ -279,7 +279,7 @@ class CF7EM_Admin {
         <label>
             <input
                 type="checkbox"
-                name="cf7_settings[collect_user_data]"
+                name="entrma_settings[collect_user_data]"
                 value="1"
                 <?php checked( $value, true ); ?>
             >
@@ -293,35 +293,35 @@ class CF7EM_Admin {
      * Page 1: Main Admin Dashboard - Shows all forms with entry count
      */
     private static function render_forms_dashboard_page() {
-        $forms_summary = CF7EM_DB::get_all_cf7_forms_summary();
+        $forms_summary = ENTRMA_DB::get_all_cf7_forms_summary();
         ?>
-        <div class="wrap cf7em-wrap">
-            <div class="cf7em-header">
-                <div class="cf7em-header-title">
+        <div class="wrap entrma-wrap">
+            <div class="entrma-header">
+                <div class="entrma-header-title">
                     <h1>
                         <span class="dashicons dashicons-feedback"></span> 
                         <?php esc_html_e('All Contact Forms', 'entrysaver-manager'); ?>
                     </h1>
-                    <p class="cf7em-subtitle"><?php esc_html_e('Select a contact form to view, edit, search, and export submitted entries.', 'entrysaver-manager'); ?></p>
+                    <p class="entrma-subtitle"><?php esc_html_e('Select a contact form to view, edit, search, and export submitted entries.', 'entrysaver-manager'); ?></p>
                 </div>
             </div>
 
             <?php if (empty($forms_summary)) : ?>
-                <div class="notice notice-info cf7em-notice">
+                <div class="notice notice-info entrma-notice">
                     <p><?php esc_html_e('No Contact Form 7 forms were found on your site. Create a form first using Contact Form 7 plugin.', 'entrysaver-manager'); ?></p>
                 </div>
             <?php else : ?>
-                <div class="cf7em-cards-grid">
+                <div class="entrma-cards-grid">
                     <?php foreach ($forms_summary as $form) : 
                         $settings = self::get_settings();
                         if(empty($settings['show_zero_entry_forms']) && $form->entry_count < 1 ){
                             continue;
                         }
                         ?>
-                        <div class="cf7em-card">
-                            <div class="cf7em-card-header">
-                                <h3 class="cf7em-card-title"><?php echo esc_html($form->title); ?></h3>
-                                <span class="cf7em-badge <?php echo $form->entry_count > 0 ? 'cf7em-badge-active' : 'cf7em-badge-zero'; ?>">
+                        <div class="entrma-card">
+                            <div class="entrma-card-header">
+                                <h3 class="entrma-card-title"><?php echo esc_html($form->title); ?></h3>
+                                <span class="entrma-badge <?php echo $form->entry_count > 0 ? 'entrma-badge-active' : 'entrma-badge-zero'; ?>">
                                     <?php
                                         /* translators: %d: number of entries */ 
                                         echo esc_html(sprintf(_n('%d Entry', '%d Entries', $form->entry_count, 'entrysaver-manager'), $form->entry_count));
@@ -329,14 +329,14 @@ class CF7EM_Admin {
                                 </span>
                             </div>
 
-                            <div class="cf7em-card-body">
-                                <div class="cf7em-info-row">
-                                    <span class="cf7em-info-label"><?php esc_html_e('Shortcode:', 'entrysaver-manager'); ?></span>
-                                    <code class="cf7em-code"><?php echo esc_html($form->shortcode); ?></code>
+                            <div class="entrma-card-body">
+                                <div class="entrma-info-row">
+                                    <span class="entrma-info-label"><?php esc_html_e('Shortcode:', 'entrysaver-manager'); ?></span>
+                                    <code class="entrma-code"><?php echo esc_html($form->shortcode); ?></code>
                                 </div>
-                                <div class="cf7em-info-row">
-                                    <span class="cf7em-info-label"><?php esc_html_e('Last Submission:', 'entrysaver-manager'); ?></span>
-                                    <span class="cf7em-info-val">
+                                <div class="entrma-info-row">
+                                    <span class="entrma-info-label"><?php esc_html_e('Last Submission:', 'entrysaver-manager'); ?></span>
+                                    <span class="entrma-info-val">
                                         <?php 
                                         if ($form->last_submission) {
                                             echo esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($form->last_submission)));
@@ -348,8 +348,8 @@ class CF7EM_Admin {
                                 </div>
                             </div>
 
-                            <div class="cf7em-card-footer">
-                                <a href="<?php echo esc_url(add_query_arg(array('page' => 'entrysaver', 'action' => 'view_entries', 'form_id' => $form->id), admin_url('admin.php'))); ?>" class="button button-primary cf7em-view-entries-btn">
+                            <div class="entrma-card-footer">
+                                <a href="<?php echo esc_url(add_query_arg(array('page' => 'entrysaver', 'action' => 'view_entries', 'form_id' => $form->id), admin_url('admin.php'))); ?>" class="button button-primary entrma-view-entries-btn">
                                     <span class="dashicons dashicons-list-view"></span>
                                     <?php esc_html_e('View Entries', 'entrysaver-manager'); ?>
                                 </a>
@@ -371,7 +371,7 @@ class CF7EM_Admin {
         $form_post = get_post($form_id);
         $form_title = $form_post ? $form_post->post_title : __('Form Entries', 'entrysaver-manager');
 
-        $list_table = new CF7EM_List_Table($form_id);
+        $list_table = new ENTRMA_List_Table($form_id);
         $list_table->prepare_items();
 
         // Handle bulk delete action if submitted via GET/POST
@@ -381,7 +381,7 @@ class CF7EM_Admin {
                         ? array_map( 'absint', (array) wp_unslash( $_REQUEST['entry_id'] ) )
                         : array();
             if (!empty($entry_ids)) {
-                $deleted_count = CF7EM_DB::bulk_delete_entries($entry_ids);
+                $deleted_count = ENTRMA_DB::bulk_delete_entries($entry_ids);
                 /* translators: %d: number of entries */ 
                 echo '<div class="notice notice-success is-dismissible"><p>' . esc_html(sprintf(_n('%d entry deleted.', '%d entries deleted.', $deleted_count, 'entrysaver-manager'), $deleted_count)) . '</p></div>';
                 // Refresh list table items
@@ -398,25 +398,25 @@ class CF7EM_Admin {
                 'action'    => 'export_csv',
                 'form_id'   => $form_id,
             ), admin_url('admin.php')),
-            'cf7em_export_nonce'
+            'entrma_export_nonce'
         );
         ?>
-        <div class="wrap cf7em-wrap">
-            <div class="cf7em-header">
-                <div class="cf7em-breadcrumb">
+        <div class="wrap entrma-wrap">
+            <div class="entrma-header">
+                <div class="entrma-breadcrumb">
                     <a href="<?php echo esc_url(admin_url('admin.php?page=entrysaver')); ?>">
                         &larr; <?php esc_html_e('All Contact Forms', 'entrysaver-manager'); ?>
                     </a>
                 </div>
-                <div class="cf7em-header-main">
+                <div class="entrma-header-main">
                     <h1>
                         <?php echo esc_html($form_title); ?>
-                        <span class="cf7em-header-count">
+                        <span class="entrma-header-count">
                             (<?php echo esc_html(number_format_i18n($list_table->get_pagination_arg('total_items'))); ?>)
                         </span>
                     </h1>
-                    <div class="cf7em-header-actions">
-                        <button type="button" id="cf7em-customize-cols-btn" class="button button-secondary">
+                    <div class="entrma-header-actions">
+                        <button type="button" id="entrma-customize-cols-btn" class="button button-secondary">
                             <span class="dashicons dashicons-columns"></span>
                             <?php esc_html_e('Customize Columns', 'entrysaver-manager'); ?>
                         </button>
@@ -429,39 +429,39 @@ class CF7EM_Admin {
             </div>
 
             <!-- List Table Form -->
-            <form id="cf7em-entries-table-form" method="get">
+            <form id="entrma-entries-table-form" method="get">
                 <input type="hidden" name="page" value="entrysaver" />
                 <input type="hidden" name="action" value="view_entries" />
                 <input type="hidden" name="form_id" value="<?php echo esc_attr($form_id); ?>" />
                 <?php wp_nonce_field('bulk-entries'); ?>
 
                 <?php
-                $list_table->search_box(__('Search Entries', 'entrysaver-manager'), 'cf7em-search');
+                $list_table->search_box(__('Search Entries', 'entrysaver-manager'), 'entrma-search');
                 $list_table->display();
                 ?>
             </form>
 
             <!-- Column Selection Modal/Drawer -->
-            <div id="cf7em-cols-modal" class="cf7em-modal" style="display:none;">
-                <div class="cf7em-modal-overlay"></div>
-                <div class="cf7em-modal-content">
-                    <div class="cf7em-modal-header">
+            <div id="entrma-cols-modal" class="entrma-modal" style="display:none;">
+                <div class="entrma-modal-overlay"></div>
+                <div class="entrma-modal-content">
+                    <div class="entrma-modal-header">
                         <h3><span class="dashicons dashicons-columns"></span> <?php esc_html_e('Select Columns to Display', 'entrysaver-manager'); ?></h3>
-                        <button type="button" class="cf7em-modal-close">&times;</button>
+                        <button type="button" class="entrma-modal-close">&times;</button>
                     </div>
-                    <div class="cf7em-modal-body">
+                    <div class="entrma-modal-body">
                         <p class="description">
                             <?php esc_html_e('Check the form fields you would like to display as columns in the entries listing table:', 'entrysaver-manager'); ?>
                         </p>
-                        <form id="cf7em-cols-form">
+                        <form id="entrma-cols-form">
                             <input type="hidden" name="form_id" value="<?php echo esc_attr($form_id); ?>" />
-                            <div class="cf7em-cols-grid">
+                            <div class="entrma-cols-grid">
                                 <?php if (!empty($available_fields)) : ?>
                                     <?php foreach ($available_fields as $field) : 
                                         $checked = in_array($field, $selected_fields, true) ? 'checked="checked"' : '';
                                         $label   = ucwords(str_replace(array('-', '_'), ' ', $field));
                                     ?>
-                                        <label class="cf7em-col-checkbox">
+                                        <label class="entrma-col-checkbox">
                                             <input type="checkbox" name="selected_columns[]" value="<?php echo esc_attr($field); ?>" <?php echo esc_attr($checked); ?> />
                                             <span><?php echo esc_html($label); ?> <code style="font-size:11px; color:#666;">(<?php echo esc_html($field); ?>)</code></span>
                                         </label>
@@ -472,44 +472,44 @@ class CF7EM_Admin {
                             </div>
                         </form>
                     </div>
-                    <div class="cf7em-modal-footer">
-                        <button type="button" class="button cf7em-modal-close"><?php esc_html_e('Cancel', 'entrysaver-manager'); ?></button>
-                        <button type="button" id="cf7em-save-cols-btn" class="button button-primary"><?php esc_html_e('Save Column Preferences', 'entrysaver-manager'); ?></button>
+                    <div class="entrma-modal-footer">
+                        <button type="button" class="button entrma-modal-close"><?php esc_html_e('Cancel', 'entrysaver-manager'); ?></button>
+                        <button type="button" id="entrma-save-cols-btn" class="button button-primary"><?php esc_html_e('Save Column Preferences', 'entrysaver-manager'); ?></button>
                     </div>
                 </div>
             </div>
 
             <!-- View Entry Detail Modal -->
-            <div id="cf7em-view-modal" class="cf7em-modal" style="display:none;">
-                <div class="cf7em-modal-overlay"></div>
-                <div class="cf7em-modal-content cf7em-modal-lg">
-                    <div class="cf7em-modal-header">
+            <div id="entrma-view-modal" class="entrma-modal" style="display:none;">
+                <div class="entrma-modal-overlay"></div>
+                <div class="entrma-modal-content entrma-modal-lg">
+                    <div class="entrma-modal-header">
                         <h3><span class="dashicons dashicons-visibility"></span> <?php esc_html_e('Entry Details', 'entrysaver-manager'); ?></h3>
-                        <button type="button" class="cf7em-modal-close">&times;</button>
+                        <button type="button" class="entrma-modal-close">&times;</button>
                     </div>
-                    <div class="cf7em-modal-body" id="cf7em-view-modal-body">
-                        <div class="cf7em-loading"><span class="spinner is-active"></span> <?php esc_html_e('Loading entry details...', 'entrysaver-manager'); ?></div>
+                    <div class="entrma-modal-body" id="entrma-view-modal-body">
+                        <div class="entrma-loading"><span class="spinner is-active"></span> <?php esc_html_e('Loading entry details...', 'entrysaver-manager'); ?></div>
                     </div>
-                    <div class="cf7em-modal-footer">
-                        <button type="button" class="button cf7em-modal-close"><?php esc_html_e('Close', 'entrysaver-manager'); ?></button>
+                    <div class="entrma-modal-footer">
+                        <button type="button" class="button entrma-modal-close"><?php esc_html_e('Close', 'entrysaver-manager'); ?></button>
                     </div>
                 </div>
             </div>
 
             <!-- Edit Entry Modal -->
-            <div id="cf7em-edit-modal" class="cf7em-modal" style="display:none;">
-                <div class="cf7em-modal-overlay"></div>
-                <div class="cf7em-modal-content cf7em-modal-lg">
-                    <div class="cf7em-modal-header">
+            <div id="entrma-edit-modal" class="entrma-modal" style="display:none;">
+                <div class="entrma-modal-overlay"></div>
+                <div class="entrma-modal-content entrma-modal-lg">
+                    <div class="entrma-modal-header">
                         <h3><span class="dashicons dashicons-edit"></span> <?php esc_html_e('Edit Entry', 'entrysaver-manager'); ?></h3>
-                        <button type="button" class="cf7em-modal-close">&times;</button>
+                        <button type="button" class="entrma-modal-close">&times;</button>
                     </div>
-                    <div class="cf7em-modal-body" id="cf7em-edit-modal-body">
-                        <div class="cf7em-loading"><span class="spinner is-active"></span> <?php esc_html_e('Loading entry editor...', 'entrysaver-manager'); ?></div>
+                    <div class="entrma-modal-body" id="entrma-edit-modal-body">
+                        <div class="entrma-loading"><span class="spinner is-active"></span> <?php esc_html_e('Loading entry editor...', 'entrysaver-manager'); ?></div>
                     </div>
-                    <div class="cf7em-modal-footer">
-                        <button type="button" class="button cf7em-modal-close"><?php esc_html_e('Cancel', 'entrysaver-manager'); ?></button>
-                        <button type="button" id="cf7em-save-edit-btn" class="button button-primary"><?php esc_html_e('Update Entry', 'entrysaver-manager'); ?></button>
+                    <div class="entrma-modal-footer">
+                        <button type="button" class="button entrma-modal-close"><?php esc_html_e('Cancel', 'entrysaver-manager'); ?></button>
+                        <button type="button" id="entrma-save-edit-btn" class="button button-primary"><?php esc_html_e('Update Entry', 'entrysaver-manager'); ?></button>
                     </div>
                 </div>
             </div>
@@ -521,7 +521,7 @@ class CF7EM_Admin {
      * AJAX: Get Entry details for View / Edit Modal
      */
     public static function ajax_get_entry() {
-        check_ajax_referer('cf7em_admin_nonce', 'nonce');
+        check_ajax_referer('entrma_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error(__('Permission denied.', 'entrysaver-manager'));
@@ -530,13 +530,13 @@ class CF7EM_Admin {
         $entry_id = isset($_POST['entry_id']) ? absint($_POST['entry_id']) : 0;
         $mode     = isset($_POST['mode']) ? sanitize_key($_POST['mode']) : 'view';
 
-        $entry = CF7EM_DB::get_entry($entry_id);
+        $entry = ENTRMA_DB::get_entry($entry_id);
         if (!$entry) {
             wp_send_json_error(__('Entry not found.', 'entrysaver-manager'));
         }
 
         // Mark as read
-        CF7EM_DB::mark_status($entry_id, 'read');
+        ENTRMA_DB::mark_status($entry_id, 'read');
 
         ob_start();
         if ($mode === 'edit') {
@@ -555,24 +555,24 @@ class CF7EM_Admin {
     private static function render_view_modal_content($entry) {
         $date_formatted = date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($entry->submitted_at));
         ?>
-        <div class="cf7em-entry-detail">
-            <div class="cf7em-detail-meta-box">
-                <div class="cf7em-meta-item">
+        <div class="entrma-entry-detail">
+            <div class="entrma-detail-meta-box">
+                <div class="entrma-meta-item">
                     <strong><?php esc_html_e('Entry ID:', 'entrysaver-manager'); ?></strong> #<?php echo esc_html($entry->id); ?>
                 </div>
-                <div class="cf7em-meta-item">
+                <div class="entrma-meta-item">
                     <strong><?php esc_html_e('Form:', 'entrysaver-manager'); ?></strong> <?php echo esc_html($entry->form_title); ?>
                 </div>
-                <div class="cf7em-meta-item">
+                <div class="entrma-meta-item">
                     <strong><?php esc_html_e('Submitted At:', 'entrysaver-manager'); ?></strong> <?php echo esc_html($date_formatted); ?>
                 </div>
                 <?php if (!empty($entry->meta_data['remote_ip'])) : ?>
-                    <div class="cf7em-meta-item">
+                    <div class="entrma-meta-item">
                         <strong><?php esc_html_e('IP Address:', 'entrysaver-manager'); ?></strong> <?php echo esc_html($entry->meta_data['remote_ip']); ?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($entry->meta_data['url'])) : ?>
-                    <div class="cf7em-meta-item">
+                    <div class="entrma-meta-item">
                         <strong><?php esc_html_e('Submitted Page:', 'entrysaver-manager'); ?></strong> 
                         <a href="<?php echo esc_url($entry->meta_data['url']); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($entry->meta_data['url']); ?></a>
                     </div>
@@ -580,7 +580,7 @@ class CF7EM_Admin {
             </div>
 
             <h4><span class="dashicons dashicons-text-page"></span> <?php esc_html_e('Submitted Form Data', 'entrysaver-manager'); ?></h4>
-            <table class="widefat striped cf7em-detail-table">
+            <table class="widefat striped entrma-detail-table">
                 <thead>
                     <tr>
                         <th style="width: 30%;"><?php esc_html_e('Field Name', 'entrysaver-manager'); ?></th>
@@ -615,7 +615,7 @@ class CF7EM_Admin {
 
             <?php if (!empty($entry->meta_data['files'])) : ?>
                 <h4 style="margin-top:20px;"><span class="dashicons dashicons-paperclip"></span> <?php esc_html_e('Uploaded File Attachments', 'entrysaver-manager'); ?></h4>
-                <ul class="cf7em-file-list">
+                <ul class="entrma-file-list">
                     <?php foreach ($entry->meta_data['files'] as $file) : ?>
                         <li>
                             <span class="dashicons dashicons-media-default"></span>
@@ -636,9 +636,9 @@ class CF7EM_Admin {
      */
     private static function render_edit_modal_content($entry) {
         ?>
-        <form id="cf7em-edit-entry-form">
+        <form id="entrma-edit-entry-form">
             <input type="hidden" name="entry_id" value="<?php echo esc_attr($entry->id); ?>" />
-            <table class="widefat striped cf7em-edit-table">
+            <table class="widefat striped entrma-edit-table">
                 <thead>
                     <tr>
                         <th style="width: 30%;"><?php esc_html_e('Field Name', 'entrysaver-manager'); ?></th>
@@ -678,7 +678,7 @@ class CF7EM_Admin {
      * AJAX: Update Entry fields data
      */
     public static function ajax_update_entry() {
-        check_ajax_referer('cf7em_admin_nonce', 'nonce');
+        check_ajax_referer('entrma_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error(__('Permission denied.', 'entrysaver-manager'));
@@ -701,7 +701,7 @@ class CF7EM_Admin {
             }
         }
 
-        $updated = CF7EM_DB::update_entry($entry_id, $sanitized_fields);
+        $updated = ENTRMA_DB::update_entry($entry_id, $sanitized_fields);
 
         if ($updated) {
             wp_send_json_success(__('Entry updated successfully.', 'entrysaver-manager'));
@@ -714,7 +714,7 @@ class CF7EM_Admin {
      * AJAX: Delete single entry
      */
     public static function ajax_delete_entry() {
-        check_ajax_referer('cf7em_admin_nonce', 'nonce');
+        check_ajax_referer('entrma_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error(__('Permission denied.', 'entrysaver-manager'));
@@ -726,7 +726,7 @@ class CF7EM_Admin {
             wp_send_json_error(__('Invalid entry ID.', 'entrysaver-manager'));
         }
 
-        $deleted = CF7EM_DB::delete_entry($entry_id);
+        $deleted = ENTRMA_DB::delete_entry($entry_id);
 
         if ($deleted) {
             wp_send_json_success(__('Entry deleted.', 'entrysaver-manager'));
@@ -739,7 +739,7 @@ class CF7EM_Admin {
      * AJAX: Save column preferences
      */
     public static function ajax_save_column_settings() {
-        check_ajax_referer('cf7em_admin_nonce', 'nonce');
+        check_ajax_referer('entrma_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error(__('Permission denied.', 'entrysaver-manager'));
@@ -754,7 +754,7 @@ class CF7EM_Admin {
 
         $sanitized_cols = array_map('sanitize_text_field', wp_unslash($selected_columns));
         $user_id        = get_current_user_id();
-        $option_key     = 'cf7em_cols_' . $form_id . '_' . $user_id;
+        $option_key     = 'entrma_cols_' . $form_id . '_' . $user_id;
 
         update_user_meta($user_id, $option_key, $sanitized_cols);
 
@@ -773,7 +773,7 @@ class CF7EM_Admin {
             wp_die(esc_html__('Permission denied.', 'entrysaver-manager'));
         }
 
-        check_admin_referer('cf7em_export_nonce');
+        check_admin_referer('entrma_export_nonce');
 
         $form_id = isset($_GET['form_id']) ? absint($_GET['form_id']) : 0;
         if (!$form_id) {
@@ -783,14 +783,14 @@ class CF7EM_Admin {
         $form_post  = get_post($form_id);
         $form_title = $form_post ? sanitize_title($form_post->post_title) : 'form-' . $form_id;
 
-        $results = CF7EM_DB::get_entries(array(
+        $results = ENTRMA_DB::get_entries(array(
             'form_id'  => $form_id,
             'per_page' => 5000, // Reasonable max export
             'paged'    => 1,
         ));
 
         $entries = $results['items'];
-        $fields  = CF7EM_DB::get_form_field_keys($form_id);
+        $fields  = ENTRMA_DB::get_form_field_keys($form_id);
 
         $filename = sprintf('entrysaver-%s-%s.csv', $form_title, gmdate('Y-m-d'));
 

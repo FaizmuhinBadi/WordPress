@@ -7,7 +7,7 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-class CF7EM_List_Table extends WP_List_Table {
+class ENTRMA_List_Table extends WP_List_Table {
 
     private $form_id;
     private $available_fields = array();
@@ -26,7 +26,7 @@ class CF7EM_List_Table extends WP_List_Table {
         ));
 
         $this->form_id = absint($form_id);
-        $this->available_fields = CF7EM_DB::get_form_field_keys($this->form_id);
+        $this->available_fields = ENTRMA_DB::get_form_field_keys($this->form_id);
         $this->selected_fields  = $this->resolve_selected_columns();
     }
 
@@ -35,7 +35,7 @@ class CF7EM_List_Table extends WP_List_Table {
      */
     private function resolve_selected_columns() {
         $user_id = get_current_user_id();
-        $option_key = 'cf7em_cols_' . $this->form_id . '_' . $user_id;
+        $option_key = 'entrma_cols_' . $this->form_id . '_' . $user_id;
         $saved = get_user_meta($user_id, $option_key, true);
 
         if (is_array($saved) && !empty($saved)) {
@@ -136,29 +136,29 @@ class CF7EM_List_Table extends WP_List_Table {
 
         if ($column_name === 'actions') {
             $view_btn = sprintf(
-                '<button type="button" class="button button-small cf7em-view-btn" data-id="%d" title="%s"><span class="dashicons dashicons-visibility"></span></button>',
+                '<button type="button" class="button button-small entrma-view-btn" data-id="%d" title="%s"><span class="dashicons dashicons-visibility"></span></button>',
                 esc_attr($item->id),
                 esc_attr__('View Entry', 'entrysaver-manager')
             );
 
             $edit_btn = sprintf(
-                '<button type="button" class="button button-small cf7em-edit-btn" data-id="%d" title="%s"><span class="dashicons dashicons-edit"></span></button>',
+                '<button type="button" class="button button-small entrma-edit-btn" data-id="%d" title="%s"><span class="dashicons dashicons-edit"></span></button>',
                 esc_attr($item->id),
                 esc_attr__('Edit Entry', 'entrysaver-manager')
             );
 
             $delete_btn = sprintf(
-                '<button type="button" class="button button-small button-link-delete cf7em-delete-btn" data-id="%d" title="%s"><span class="dashicons dashicons-trash"></span></button>',
+                '<button type="button" class="button button-small button-link-delete entrma-delete-btn" data-id="%d" title="%s"><span class="dashicons dashicons-trash"></span></button>',
                 esc_attr($item->id),
                 esc_attr__('Delete Entry', 'entrysaver-manager')
             );
 
-            return sprintf('<div class="cf7em-actions-wrap">%s %s %s</div>', $view_btn, $edit_btn, $delete_btn);
+            return sprintf('<div class="entrma-actions-wrap">%s %s %s</div>', $view_btn, $edit_btn, $delete_btn);
         }
 
         if ($column_name === 'fields_summary') {
             if (empty($item->fields_data)) {
-                return '<span class="cf7em-empty-val">—</span>';
+                return '<span class="entrma-empty-val">—</span>';
             }
             $summary_parts = array();
             foreach ($item->fields_data as $key => $val) {
@@ -171,7 +171,7 @@ class CF7EM_List_Table extends WP_List_Table {
                     $summary_parts[] = '<strong>' . esc_html($label) . ':</strong> ' . esc_html(mb_strimwidth($val, 0, 30, '...'));
                 }
             }
-            return !empty($summary_parts) ? implode(' <span style="color:#ccc; margin:0 4px;">|</span> ', array_slice($summary_parts, 0, 3)) : '<span class="cf7em-empty-val">—</span>';
+            return !empty($summary_parts) ? implode(' <span style="color:#ccc; margin:0 4px;">|</span> ', array_slice($summary_parts, 0, 3)) : '<span class="entrma-empty-val">—</span>';
         }
 
         // Render dynamic field columns
@@ -185,7 +185,7 @@ class CF7EM_List_Table extends WP_List_Table {
 
             $val = trim((string)$val);
             if ($val === '') {
-                return '<span class="cf7em-empty-val">—</span>';
+                return '<span class="entrma-empty-val">—</span>';
             }
 
             // Truncate long text for table view
@@ -200,7 +200,7 @@ class CF7EM_List_Table extends WP_List_Table {
      * Prepare table items
      */
     public function prepare_items() {
-        $per_page = $this->get_items_per_page('cf7em_entries_per_page', 20);
+        $per_page = $this->get_items_per_page('entrma_entries_per_page', 20);
         $paged    = $this->get_pagenum();
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- These are read-only list filtering parameters.
@@ -219,7 +219,7 @@ class CF7EM_List_Table extends WP_List_Table {
             'order'    => $order,
         );
 
-        $results = CF7EM_DB::get_entries($query_args);
+        $results = ENTRMA_DB::get_entries($query_args);
 
         $this->items = $results['items'];
 

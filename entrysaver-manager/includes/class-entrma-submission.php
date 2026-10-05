@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class CF7EM_Submission {
+class ENTRMA_Submission {
 
     /**
      * Initialize submission hook listener
@@ -84,13 +84,13 @@ class CF7EM_Submission {
             'files'      => $file_meta,
         );
 
-        $settings = CF7EM_Admin::get_settings();
+        $settings = ENTRMA_Admin::get_settings();
         if ( ! empty( $settings['collect_user_data'] ) ) {
             $meta_data['remote_ip']  = sanitize_text_field( $submission->get_meta( 'remote_ip' ) );
             $meta_data['user_agent'] = sanitize_text_field( $submission->get_meta( 'user_agent' ) );
         }
 
         // Save to DB
-        CF7EM_DB::insert_entry($form_id, $form_title, $clean_fields, $meta_data);
+        ENTRMA_DB::insert_entry($form_id, $form_title, $clean_fields, $meta_data);
     }
 }

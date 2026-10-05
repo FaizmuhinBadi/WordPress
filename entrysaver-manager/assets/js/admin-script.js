@@ -16,35 +16,35 @@
         }
 
         // Close Modal Events
-        $(document).on('click', '.cf7em-modal-close, .cf7em-modal-overlay', function(e) {
+        $(document).on('click', '.entrma-modal-close, .entrma-modal-overlay', function(e) {
             e.preventDefault();
-            var $modal = $(this).closest('.cf7em-modal');
+            var $modal = $(this).closest('.entrma-modal');
             closeModal($modal);
         });
 
         // ESC key closes active modal
         $(document).keyup(function(e) {
             if (e.key === "Escape") {
-                $('.cf7em-modal:visible').fadeOut(200);
+                $('.entrma-modal:visible').fadeOut(200);
             }
         });
 
         /* ------------------------------------------------------------------
          * 1. COLUMN CUSTOMIZATION MODAL
          * ------------------------------------------------------------------ */
-        $('#cf7em-customize-cols-btn').on('click', function(e) {
+        $('#entrma-customize-cols-btn').on('click', function(e) {
             e.preventDefault();
-            openModal($('#cf7em-cols-modal'));
+            openModal($('#entrma-cols-modal'));
         });
 
-        $('#cf7em-save-cols-btn').on('click', function(e) {
+        $('#entrma-save-cols-btn').on('click', function(e) {
             e.preventDefault();
             var $btn = $(this);
-            var formData = $('#cf7em-cols-form').serializeArray();
+            var formData = $('#entrma-cols-form').serializeArray();
             
             var postData = {
-                action: 'cf7em_save_column_settings',
-                nonce: cf7emData.nonce,
+                action: 'entrma_save_column_settings',
+                nonce: entrmaData.nonce,
             };
 
             $.each(formData, function(i, field) {
@@ -58,122 +58,122 @@
                 }
             });
 
-            $btn.prop('disabled', true).text(cf7emData.i18n.saving);
+            $btn.prop('disabled', true).text(entrmaData.i18n.saving);
 
-            $.post(cf7emData.ajaxUrl, postData, function(response) {
+            $.post(entrmaData.ajaxUrl, postData, function(response) {
                 $btn.prop('disabled', false).text('Save Column Preferences');
                 if (response.success) {
-                    closeModal($('#cf7em-cols-modal'));
+                    closeModal($('#entrma-cols-modal'));
                     window.location.reload();
                 } else {
-                    alert(response.data || cf7emData.i18n.error);
+                    alert(response.data || entrmaData.i18n.error);
                 }
             }).fail(function() {
                 $btn.prop('disabled', false).text('Save Column Preferences');
-                alert(cf7emData.i18n.error);
+                alert(entrmaData.i18n.error);
             });
         });
 
         /* ------------------------------------------------------------------
          * 2. VIEW ENTRY MODAL
          * ------------------------------------------------------------------ */
-        $(document).on('click', '.cf7em-view-btn', function(e) {
+        $(document).on('click', '.entrma-view-btn', function(e) {
             e.preventDefault();
             var entryId = $(this).data('id');
-            var $modal = $('#cf7em-view-modal');
-            var $body  = $('#cf7em-view-modal-body');
+            var $modal = $('#entrma-view-modal');
+            var $body  = $('#entrma-view-modal-body');
 
-            $body.html('<div class="cf7em-loading"><span class="spinner is-active"></span> Loading entry details...</div>');
+            $body.html('<div class="entrma-loading"><span class="spinner is-active"></span> Loading entry details...</div>');
             openModal($modal);
 
-            $.post(cf7emData.ajaxUrl, {
-                action: 'cf7em_get_entry',
-                nonce: cf7emData.nonce,
+            $.post(entrmaData.ajaxUrl, {
+                action: 'entrma_get_entry',
+                nonce: entrmaData.nonce,
                 entry_id: entryId,
                 mode: 'view'
             }, function(response) {
                 if (response.success) {
                     $body.html(response.data.html);
                 } else {
-                    $body.html('<div class="notice notice-error"><p>' + (response.data || cf7emData.i18n.error) + '</p></div>');
+                    $body.html('<div class="notice notice-error"><p>' + (response.data || entrmaData.i18n.error) + '</p></div>');
                 }
             }).fail(function() {
-                $body.html('<div class="notice notice-error"><p>' + cf7emData.i18n.error + '</p></div>');
+                $body.html('<div class="notice notice-error"><p>' + entrmaData.i18n.error + '</p></div>');
             });
         });
 
         /* ------------------------------------------------------------------
          * 3. EDIT ENTRY MODAL
          * ------------------------------------------------------------------ */
-        $(document).on('click', '.cf7em-edit-btn', function(e) {
+        $(document).on('click', '.entrma-edit-btn', function(e) {
             e.preventDefault();
             var entryId = $(this).data('id');
-            var $modal = $('#cf7em-edit-modal');
-            var $body  = $('#cf7em-edit-modal-body');
+            var $modal = $('#entrma-edit-modal');
+            var $body  = $('#entrma-edit-modal-body');
 
-            $body.html('<div class="cf7em-loading"><span class="spinner is-active"></span> Loading entry editor...</div>');
+            $body.html('<div class="entrma-loading"><span class="spinner is-active"></span> Loading entry editor...</div>');
             openModal($modal);
 
-            $.post(cf7emData.ajaxUrl, {
-                action: 'cf7em_get_entry',
-                nonce: cf7emData.nonce,
+            $.post(entrmaData.ajaxUrl, {
+                action: 'entrma_get_entry',
+                nonce: entrmaData.nonce,
                 entry_id: entryId,
                 mode: 'edit'
             }, function(response) {
                 if (response.success) {
                     $body.html(response.data.html);
                 } else {
-                    $body.html('<div class="notice notice-error"><p>' + (response.data || cf7emData.i18n.error) + '</p></div>');
+                    $body.html('<div class="notice notice-error"><p>' + (response.data || entrmaData.i18n.error) + '</p></div>');
                 }
             }).fail(function() {
-                $body.html('<div class="notice notice-error"><p>' + cf7emData.i18n.error + '</p></div>');
+                $body.html('<div class="notice notice-error"><p>' + entrmaData.i18n.error + '</p></div>');
             });
         });
 
-        $('#cf7em-save-edit-btn').on('click', function(e) {
+        $('#entrma-save-edit-btn').on('click', function(e) {
             e.preventDefault();
             var $btn = $(this);
-            var $form = $('#cf7em-edit-entry-form');
+            var $form = $('#entrma-edit-entry-form');
 
             if (!$form.length) {
                 return;
             }
 
             var formData = $form.serialize();
-            $btn.prop('disabled', true).text(cf7emData.i18n.saving);
+            $btn.prop('disabled', true).text(entrmaData.i18n.saving);
 
-            $.post(cf7emData.ajaxUrl, formData + '&action=cf7em_update_entry&nonce=' + cf7emData.nonce, function(response) {
+            $.post(entrmaData.ajaxUrl, formData + '&action=entrma_update_entry&nonce=' + entrmaData.nonce, function(response) {
                 $btn.prop('disabled', false).text('Update Entry');
                 if (response.success) {
-                    closeModal($('#cf7em-edit-modal'));
+                    closeModal($('#entrma-edit-modal'));
                     window.location.reload();
                 } else {
-                    alert(response.data || cf7emData.i18n.error);
+                    alert(response.data || entrmaData.i18n.error);
                 }
             }).fail(function() {
                 $btn.prop('disabled', false).text('Update Entry');
-                alert(cf7emData.i18n.error);
+                alert(entrmaData.i18n.error);
             });
         });
 
         /* ------------------------------------------------------------------
          * 4. DELETE ENTRY (SINGLE)
          * ------------------------------------------------------------------ */
-        $(document).on('click', '.cf7em-delete-btn', function(e) {
+        $(document).on('click', '.entrma-delete-btn', function(e) {
             e.preventDefault();
             var $btn = $(this);
             var entryId = $btn.data('id');
             var $row = $btn.closest('tr');
 
-            if (!confirm(cf7emData.i18n.confirmDelete)) {
+            if (!confirm(entrmaData.i18n.confirmDelete)) {
                 return;
             }
 
             $btn.prop('disabled', true);
 
-            $.post(cf7emData.ajaxUrl, {
-                action: 'cf7em_delete_entry',
-                nonce: cf7emData.nonce,
+            $.post(entrmaData.ajaxUrl, {
+                action: 'entrma_delete_entry',
+                nonce: entrmaData.nonce,
                 entry_id: entryId
             }, function(response) {
                 if (response.success) {
@@ -182,11 +182,11 @@
                     });
                 } else {
                     $btn.prop('disabled', false);
-                    alert(response.data || cf7emData.i18n.error);
+                    alert(response.data || entrmaData.i18n.error);
                 }
             }).fail(function() {
                 $btn.prop('disabled', false);
-                alert(cf7emData.i18n.error);
+                alert(entrmaData.i18n.error);
             });
         });
 

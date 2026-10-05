@@ -3,25 +3,25 @@
  */
 
 :root {
-    --cf7em-primary: #2271b1;
-    --cf7em-primary-hover: #135e96;
-    --cf7em-bg-card: #ffffff;
-    --cf7em-border: #c3c4c7;
-    --cf7em-radius: 8px;
-    --cf7em-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --entrma-primary: #2271b1;
+    --entrma-primary-hover: #135e96;
+    --entrma-bg-card: #ffffff;
+    --entrma-border: #c3c4c7;
+    --entrma-radius: 8px;
+    --entrma-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.cf7em-wrap {
+.entrma-wrap {
     margin: 20px 20px 0 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 /* Header Styling */
-.cf7em-header {
+.entrma-header {
     margin-bottom: 24px;
 }
 
-.cf7em-header h1 {
+.entrma-header h1 {
     font-size: 24px;
     font-weight: 600;
     color: #1d2327;
@@ -31,83 +31,83 @@
     margin-bottom: 4px;
 }
 
-.cf7em-header h1 .dashicons {
+.entrma-header h1 .dashicons {
     font-size: 28px;
     width: 28px;
     height: 28px;
-    color: var(--cf7em-primary);
+    color: var(--entrma-primary);
 }
 
-.cf7em-subtitle {
+.entrma-subtitle {
     font-size: 14px;
     color: #646970;
     margin: 0;
 }
 
-.cf7em-breadcrumb {
+.entrma-breadcrumb {
     margin-bottom: 10px;
 }
 
-.cf7em-breadcrumb a {
+.entrma-breadcrumb a {
     text-decoration: none;
     font-weight: 500;
-    color: var(--cf7em-primary);
+    color: var(--entrma-primary);
 }
 
-.cf7em-breadcrumb a:hover {
-    color: var(--cf7em-primary-hover);
+.entrma-breadcrumb a:hover {
+    color: var(--entrma-primary-hover);
 }
 
-.cf7em-header-main {
+.entrma-header-main {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 16px;
 }
 
-.cf7em-header-count {
+.entrma-header-count {
     font-size: 18px;
     font-weight: 400;
     color: #646970;
 }
 
-.cf7em-header-actions {
+.entrma-header-actions {
     display: flex;
     gap: 10px;
     margin-left: auto;
 }
 
-.cf7em-header-actions .button .dashicons {
+.entrma-header-actions .button .dashicons {
     margin-top: 3px;
     margin-right: 4px;
 }
 
 /* Form Dashboard Grid Cards */
-.cf7em-cards-grid {
+.entrma-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 20px;
     margin-top: 16px;
 }
 
-.cf7em-card {
-    background: var(--cf7em-bg-card);
-    border: 1px solid var(--cf7em-border);
-    border-radius: var(--cf7em-radius);
+.entrma-card {
+    background: var(--entrma-bg-card);
+    border: 1px solid var(--entrma-border);
+    border-radius: var(--entrma-radius);
     padding: 20px;
-    box-shadow: var(--cf7em-shadow);
+    box-shadow: var(--entrma-shadow);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.cf7em-card:hover {
+.entrma-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-.cf7em-card-header {
+.entrma-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -115,7 +115,7 @@
     margin-bottom: 14px;
 }
 
-.cf7em-card-title {
+.entrma-card-title {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
@@ -123,7 +123,7 @@
     line-height: 1.3;
 }
 
-.cf7em-badge {
+.entrma-badge {
     display: inline-block;
     padding: 3px 10px;
     border-radius: 12px;
@@ -132,21 +132,21 @@
     white-space: nowrap;
 }
 
-.cf7em-badge-active {
+.entrma-badge-active {
     background: #e7f5ed;
     color: #0e8a46;
 }
 
-.cf7em-badge-zero {
+.entrma-badge-zero {
     background: #f0f0f1;
     color: #646970;
 }
 
-.cf7em-card-body {
+.entrma-card-body {
     margin-bottom: 20px;
 }
 
-.cf7em-info-row {
+.entrma-info-row {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -154,12 +154,12 @@
     font-size: 13px;
 }
 
-.cf7em-info-label {
+.entrma-info-label {
     color: #646970;
     font-weight: 500;
 }
 
-.cf7em-code {
+.entrma-code {
     background: #f6f7f7;
     padding: 4px 8px;
     border-radius: 4px;
@@ -168,31 +168,31 @@
     word-break: break-all;
 }
 
-.cf7em-card-footer {
+.entrma-card-footer {
     border-top: 1px solid #f0f0f1;
     padding-top: 14px;
     display: flex;
     justify-content: flex-end;
 }
 
-.cf7em-view-entries-btn {
+.entrma-view-entries-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
 }
 
-.cf7em-view-entries-btn .dashicons {
+.entrma-view-entries-btn .dashicons {
     color: #fff;
 }
 
 /* Actions Column Buttons */
-.cf7em-actions-wrap {
+.entrma-actions-wrap {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.cf7em-actions-wrap .button-small {
+.entrma-actions-wrap .button-small {
     display: inline-flex;
     align-items: center;
     gap: 3px;
@@ -201,19 +201,19 @@
     line-height: 26px;
 }
 
-.cf7em-actions-wrap .dashicons {
+.entrma-actions-wrap .dashicons {
     font-size: 14px;
     width: 14px;
     height: 14px;
     margin-top: 2px;
 }
 
-.cf7em-empty-val {
+.entrma-empty-val {
     color: #a7aaad;
 }
 
 /* Modal Popup System */
-.cf7em-modal {
+.entrma-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -225,7 +225,7 @@
     justify-content: center;
 }
 
-.cf7em-modal-overlay {
+.entrma-modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -235,25 +235,25 @@
     backdrop-filter: blur(2px);
 }
 
-.cf7em-modal-content {
+.entrma-modal-content {
     position: relative;
     background: #ffffff;
     width: 90%;
     max-width: 580px;
     max-height: 85vh;
-    border-radius: var(--cf7em-radius);
+    border-radius: var(--entrma-radius);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: cf7emModalFadeIn 0.2s ease-out;
+    animation: entrmaModalFadeIn 0.2s ease-out;
 }
 
-.cf7em-modal-lg {
+.entrma-modal-lg {
     max-width: 720px;
 }
 
-@keyframes cf7emModalFadeIn {
+@keyframes entrmaModalFadeIn {
     from {
         opacity: 0;
         transform: scale(0.96);
@@ -264,16 +264,16 @@
     }
 }
 
-.cf7em-modal-header {
+.entrma-modal-header {
     padding: 16px 20px;
-    border-bottom: 1px solid var(--cf7em-border);
+    border-bottom: 1px solid var(--entrma-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #f6f7f7;
 }
 
-.cf7em-modal-header h3 {
+.entrma-modal-header h3 {
     margin: 0;
     font-size: 16px;
     display: flex;
@@ -281,7 +281,7 @@
     gap: 8px;
 }
 
-.cf7em-modal-close {
+.entrma-modal-close {
     background: none;
     border: none;
     font-size: 24px;
@@ -291,19 +291,19 @@
     padding: 0;
 }
 
-.cf7em-modal-close:hover {
+.entrma-modal-close:hover {
     color: #d63638;
 }
 
-.cf7em-modal-body {
+.entrma-modal-body {
     padding: 20px;
     overflow-y: auto;
     flex-grow: 1;
 }
 
-.cf7em-modal-footer {
+.entrma-modal-footer {
     padding: 14px 20px;
-    border-top: 1px solid var(--cf7em-border);
+    border-top: 1px solid var(--entrma-border);
     background: #f6f7f7;
     display: flex;
     justify-content: flex-end;
@@ -311,14 +311,14 @@
 }
 
 /* Column Selection Grid */
-.cf7em-cols-grid {
+.entrma-cols-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 12px;
     margin-top: 14px;
 }
 
-.cf7em-col-checkbox {
+.entrma-col-checkbox {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -331,12 +331,12 @@
     transition: background 0.15s ease;
 }
 
-.cf7em-col-checkbox:hover {
+.entrma-col-checkbox:hover {
     background: #f0f0f1;
 }
 
 /* Detail View */
-.cf7em-detail-meta-box {
+.entrma-detail-meta-box {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
@@ -348,19 +348,19 @@
     font-size: 13px;
 }
 
-.cf7em-detail-table th,
-.cf7em-edit-table th {
+.entrma-detail-table th,
+.entrma-edit-table th {
     background: #f6f7f7;
     font-weight: 600;
 }
 
-.cf7em-file-list {
+.entrma-file-list {
     margin: 10px 0 0 0;
     padding: 0;
     list-style: none;
 }
 
-.cf7em-file-list li {
+.entrma-file-list li {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -368,7 +368,7 @@
     margin-bottom: 6px;
 }
 
-.cf7em-loading {
+.entrma-loading {
     display: flex;
     align-items: center;
     justify-content: center;

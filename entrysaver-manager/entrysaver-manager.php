@@ -16,11 +16,11 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('CF7EM_VERSION', '1.0.0');
-define('CF7EM_FILE', __FILE__);
-define('CF7EM_PATH', plugin_dir_path(__FILE__));
-define('CF7EM_URL', plugin_dir_url(__FILE__));
-define('CF7EM_DB_VERSION', '1.0.0');
+define('ENTRMA_VERSION', '1.0.0');
+define('ENTRMA_FILE', __FILE__);
+define('ENTRMA_PATH', plugin_dir_path(__FILE__));
+define('ENTRMA_URL', plugin_dir_url(__FILE__));
+define('ENTRMA_DB_VERSION', '1.0.0');
 
 /**
  * Main EntrySaver Manager Class
@@ -55,18 +55,18 @@ final class EntrySaver_Manager {
      * Include required core files
      */
     private function includes() {
-        require_once CF7EM_PATH . 'includes/class-cf7em-db.php';
-        require_once CF7EM_PATH . 'includes/class-cf7em-submission.php';
-        require_once CF7EM_PATH . 'includes/class-cf7em-list-table.php';
-        require_once CF7EM_PATH . 'includes/class-cf7em-admin.php';
+        require_once ENTRMA_PATH . 'includes/class-entrma-db.php';
+        require_once ENTRMA_PATH . 'includes/class-entrma-submission.php';
+        require_once ENTRMA_PATH . 'includes/class-entrma-list-table.php';
+        require_once ENTRMA_PATH . 'includes/class-entrma-admin.php';
     }
 
     /**
      * Initialize WordPress hooks
      */
     private function init_hooks() {
-        register_activation_hook(CF7EM_FILE, array($this, 'activate'));
-        register_deactivation_hook(CF7EM_FILE, array($this, 'deactivate'));
+        register_activation_hook(ENTRMA_FILE, array($this, 'activate'));
+        register_deactivation_hook(ENTRMA_FILE, array($this, 'deactivate'));
         add_action('plugins_loaded', array($this, 'init_components'));
     }
 
@@ -74,8 +74,8 @@ final class EntrySaver_Manager {
      * Activate the plugin
      */
     public function activate() {
-        CF7EM_DB::create_tables();
-        update_option('cf7em_db_version', CF7EM_DB_VERSION);
+        ENTRMA_DB::create_tables();
+        update_option('entrma_db_version', ENTRMA_DB_VERSION);
     }
 
     /**
@@ -89,11 +89,11 @@ final class EntrySaver_Manager {
      * Initialize components
      */
     public function init_components() {
-        CF7EM_DB::check_update();
-        CF7EM_Submission::init();
+        ENTRMA_DB::check_update();
+        ENTRMA_Submission::init();
         
         if (is_admin()) {
-            CF7EM_Admin::init();
+            ENTRMA_Admin::init();
         }
     }
 }

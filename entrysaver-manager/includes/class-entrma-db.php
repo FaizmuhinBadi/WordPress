@@ -3,14 +3,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class CF7EM_DB {
+class ENTRMA_DB {
 
     /**
      * Get table name
      */
     public static function get_table_name() {
         global $wpdb;
-        return $wpdb->prefix . 'cf7_entries';
+        return $wpdb->prefix . 'entrma_entries';
     }
 
     /**
@@ -42,10 +42,10 @@ class CF7EM_DB {
      * Check if database version needs update
      */
     public static function check_update() {
-        $installed_ver = get_option('cf7em_db_version');
-        if ($installed_ver !== CF7EM_DB_VERSION) {
+        $installed_ver = get_option('entrma_db_version');
+        if ($installed_ver !== ENTRMA_DB_VERSION) {
             self::create_tables();
-            update_option('cf7em_db_version', CF7EM_DB_VERSION);
+            update_option('entrma_db_version', ENTRMA_DB_VERSION);
         }
     }
 
